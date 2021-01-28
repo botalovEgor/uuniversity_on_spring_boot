@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>аудитория</title>
+</head>
+<body>
+<a th:href="@{/}">главная страница</a>
+<br>
+<p>id: <span th:text="${lectureHall.id}"></span></p>
+<p>номер корпуса: <span th:text="${lectureHall.housing}"></span></p>
+<p>этаж: <span th:text="${lectureHall.floor}"></span></p>
+<p>номер кабинета: <span th:text="${lectureHall.number}"></span></p>
+<br>
+<a href="/lectureHalls">показать все аудитории</a>
+</body>
+</html>

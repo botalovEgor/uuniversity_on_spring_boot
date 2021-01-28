@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>учитель</title>
+</head>
+<body>
+<a th:href="@{/}">главная страница</a>
+<br>
+<p>id: <span th:text="${teacherDto.id}">id</span></p>
+<p>имя: <span th:text="${teacherDto.firstName}"></span></p>
+<p>фамилия: <span th:text="${teacherDto.lastName}"></span></p>
+<br>
+<a href="/teachers">показать всех учителей</a>
+</body>
+</html>

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>группа</title>
+</head>
+<body>
+<a th:href="@{/}">главная страница</a>
+<br>
+<p>id группы: <span th:text="${groupDto.id}"></span></p>
+<p>название: <span th:text="${groupDto.description}"></span></p>
+<p>учебная программа: <span th:text="${groupDto.trainingProgram}"></span></p>
+<br>
+<a href="/groups">показать все группы</a>
+</body>
+</html>

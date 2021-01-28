@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>учебная программа</title>
+</head>
+<body>
+<a th:href="@{/}">главная страница</a>
+<br>
+<p>id: <span th:text="${trainingProgramDto.id}"></span></p>
+<p>специальность: <span th:text="${trainingProgramDto.speciality}"></span></p>
+<br>
+<a href="/trainingPrograms">показать все учебные программы</a>
+</body>
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8"/>
+    <title>изменить группу</title>
+
+</head>
+<body th:inline="text">
+<a th:href="@{/}">главная страница</a>
+<br>
+<h2> изменить группу [[${groupDto.description}]]</h2>
+<form th:action="@{/groups/update}" th:method="POST" th:object="${groupDto}">
+    <label for="id"> номер группы</label>
+    <input type="text" th:field="*{id}" th:value="*{id}" id="id" readonly/>
+    <br/>
+    <label for="description">название группы</label>
+    <input type="text" th:field="*{description}" th:value="*{description}" id="description"/>
+    <br/>
+    <label for="trainingProgram">учебная программа</label>
+    <input type="text" th:field="*{trainingProgram}" th:value="*{trainingProgram}" id="trainingProgram"/>
+    <br/>
+    <br/><input type="submit" value="изменить"/><br/>
+</form>
+
+</body>
+</html>

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>студент</title>
+</head>
+<body>
+<a th:href="@{/}">главная страница</a>
+<br>
+<p>id: <span th:text="${student.id}"></span></p>
+<p>имя: <span th:text="${student.firstName}"></span></p>
+<p>фамилия: <span th:text="${student.lastName}"></span></p>
+<p>id группы: <span th:text="${student.groupDescription}"></span></p>
+<br>
+<a href="/students"> показать всех студентов</a>
+</body>
+</html>

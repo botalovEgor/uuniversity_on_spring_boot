@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>один элемент расписания</title>
+</head>
+<body>
+<a th:href="@{/}">главная страница</a>
+<br>
+<p>id: <span th:text="${scheduleDto.id}"></span></p>
+<p>дата: <span th:text="${scheduleDto.lessonDate}"></span></p>
+<p>время: <span th:text="${scheduleDto.lessonTime}"></span></p>
+<p>корпус: <span th:text="${scheduleDto.lectureHallHousing}"></span></p>
+<p>этаж: <span th:text="${scheduleDto.lectureHallFloor}"></span></p>
+<p>номер кабинета: <span th:text="${scheduleDto.lectureHallNumber}"></span></p>
+<p>группа: <span th:text="${scheduleDto.groupDescription}"></span></p>
+<p>предмет: <span th:text="${scheduleDto.courseName}"></span></p>
+<p>имя учителя: <span th:text="${scheduleDto.teacherFirstName}"></span></p>
+<p>фамилия учителя: <span th:text="${scheduleDto.teacherLastName}"></span></p>
+
+
+<br>
+<a href="/schedules">показать все расписание</a>
+</body>
+</html>

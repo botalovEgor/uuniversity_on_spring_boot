@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>все учителя</title>
+</head>
+<body>
+<a th:href="@{/}">главная страница</a>
+<br>
+<br>
+<table border="1">
+    <thead>
+    <tr>
+        <th>id</th>
+        <th>имя</th>
+        <th>фамилия</th>
+        <th align="center">действия</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${!page.hasContent()}">
+        <td colspan="4">не найдено ни одного учителя</td>
+    </tr>
+    <tr th:each="teacher : ${page}">
+        <td><span th:text="${teacher.id}"></span></td>
+        <td><span th:text="${teacher.firstName}"></span></td>
+        <td><span th:text="${teacher.lastName}"></span></td>
+        <td>
+            <a th:href="@{/teachers/{id}/update(id=${teacher.id})}">изменить</a>
+            <a th:href="@{/teachers/{id}/delete(id=${teacher.id})}">удалить</a>
+            <a th:href="@{/teachers/{teacherId}/courses(teacherId=${teacher.id})}">список предметов</a>
+            <a th:href="@{schedules/getSchedule(teacherId=${teacher.id})}">получить расписание</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<a th:if="${page.hasPrevious()}" th:href="@{/teachers(page=${page.previousPageable().pageNumber}, size=${page.size})}">предыдущая
+    страница</a>
+
+<a th:if="${page.hasNext()}" th:href="@{/teachers(page=${page.nextPageable().pageNumber}, size=${page.size})}">следуюшая
+    страница</a>
+<br>
+<form th:action="@{/teachers}" method="post">
+    <p><b>Создать учителя</b></p>
+    <label for="firstName">имя</label>
+    <input type="text" id="firstName" name="firstName"/>
+
+    <label for="lastName">фамилия</label>
+    <input type="text" id="lastName" name="lastName"/>
+
+    <input type="submit" value="добавить"/>
+</form>
+</body>
+</html>

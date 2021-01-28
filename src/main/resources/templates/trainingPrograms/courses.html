@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Courses</title>
+</head>
+<body>
+<a th:href="@{/}">главная страница</a>
+<br>
+<p>
+    <span>В программу </span>
+    <span th:text="${trainingProgram.id} "></span>
+    <span th:text="${trainingProgram.speciality}"></span>
+    <span> входят следующие предметы:</span>
+</p>
+<table border="1">
+    <thead>
+    <tr>
+        <th> номер</th>
+        <th> имя предмета</th>
+        <th> количество часов</th>
+        <th> действия</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${courses.isEmpty()}">
+        <td colspan="4" align="center"> не преподает ни одного предмета</td>
+    </tr>
+    <tr th:each="course : ${courses}">
+        <td><span th:text="${course.id}"> id </span></td>
+        <td><span th:text="${course.name}"> name </span></td>
+        <td><span th:text="${course.hours}"> hours </span></td>
+        <td><a th:href="@{/training-programs/{programId}/courses/{courseId}/delete(courseId=${course.id}, programId=${trainingProgram.id})}">убрать предмет</a></td>
+    </tr>
+    </tbody>
+</table>
+<br>
+<form th:action="@{/training-programs/{programId}/courses(programId=${trainingProgram.id})}" method="post">
+    <p><b>Добавить предмет в учебную программу:</b></p>
+
+    <label for="courseName">Название предмета</label>
+    <input type="text" th:name="courseName" id="courseName" name="courseName"/>
+
+    <input type="submit" value="добавить"/><br/>
+</form>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>курсы учителя </title>
+</head>
+<body>
+<a th:href="@{/}">главная страница</a>
+<br>
+<p>
+    <span>учитель </span>
+    <span th:text="${teacher.id} "></span>
+    <span th:text="${teacher.firstName}"></span>
+    <span th:text="${teacher.lastName}"></span>
+    <span> предподает следующие предметы:</span>
+</p>
+<br>
+<table border="1">
+    <thead>
+    <tr>
+        <th> номер</th>
+        <th> имя предмета</th>
+        <th> количество часов</th>
+        <th> действия</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${courses.isEmpty()}">
+        <td colspan="4" align="center"> не преподает ни одного предмета</td>
+    </tr>
+    <tr th:each="course : ${courses}">
+        <td><span th:text="${course.id}"> id </span></td>
+        <td><span th:text="${course.name}"> name </span></td>
+        <td><span th:text="${course.hours}"> hours </span></td>
+        <td><a th:href="@{/teachers/{teacherId}/courses/{courseId}/delete(courseId=${course.id}, teacherId=${teacher.id})}">убрать предмет</a></td>
+    </tr>
+    </tbody>
+</table>
+<br>
+<form th:action="@{/teachers/{teacherId}/courses(teacherId=${teacher.id})}" method="post">
+    <p><b>Добавить учителю предмет:</b></p>
+
+    <label for="courseName">Название предмета</label>
+    <input type="text" th:name="courseName" id="courseName" name="courseName"/>
+
+    <input type="submit" value="добавить"/><br/>
+</form>
+</body>
+</html>

@@ -1,0 +1,1655 @@
+openapi: 3.0.0
+info:
+  title: University_API
+  description: University_API
+  version: 1.0.0
+servers:
+  - url: 'localhost:8081/api'
+paths:
+
+  /courses:
+    get:
+      summary: Get all courses
+      description: Get a list of all courses taught at the university
+      parameters:
+        - $ref: '#/components/parameters/pageNumberParam'
+        - $ref: '#/components/parameters/pageSizeParam'
+        - $ref: '#/components/parameters/sortPageParam'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Page' #Returns page, in which the element "content" is typed by a course
+        '500':
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: Add new course
+      requestBody:
+        description: Course wich should add
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Course' #id should be null
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Course' #Return added course with id
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Update course
+      description: Update course with given id
+      requestBody:
+        description: Course which should update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Course' #id should not be null
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Course'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /courses/{id}:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+          minimum: 1
+        required: true
+        description: The course id
+    get:
+      summary: Get one course
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Course'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Delete course with given id
+      responses:
+        '200':
+          description: Ok
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /courses/name/{name}:
+    get:
+      parameters:
+        - in: path
+          name: name
+          schema:
+            type: string
+          required: true
+          description: The course name
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Course'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /courses/{id}/teachers:
+    get:
+      summary: Get teachers
+      description: Get all teachers which teach course with given id
+      parameters:
+        - in: path
+          required: true
+          name: id
+          schema:
+            type: integer
+            minimum: 1
+        - $ref: '#/components/parameters/pageNumberParam'
+        - $ref: '#/components/parameters/pageSizeParam'
+        - $ref: '#/components/parameters/sortPageParam'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Page' #Returns page, in which the element "content" is typed by a teacher
+        '404':
+          description: Not Found #when course with given id not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request # when id is not valid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /courses/{courseId}/teachers/{teacherId}:
+    parameters:
+      - in: path
+        required: true
+        name: courseId
+        schema:
+          type: integer
+          minimum: 1
+      - in: path
+        schema:
+          type: integer
+        required: true
+        name: teacherId
+    post:
+      summary: Add teacher
+      description: Add teacher with given teacherId to course with given courseId
+      responses:
+        '201':
+          description: Created
+        '404':
+          description: Not Found #when course or teacher with given ids not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request # when courseId or(and) teacherId is not valid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Delete teacher
+      description: Delete teacher with given teacherId from course with given courseId
+      responses:
+        '200':
+          description: Ok
+        '404':
+          description: Not Found #when course or teacher with given ids not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request # when courseId or(and) teacherId is not valid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /courses/{id}/training-programs:
+    get:
+      summary: Get trainingPrograms
+      description: Get all trainingPrograms in which courses with the given id are taught
+      parameters:
+        - in: path
+          required: true
+          name: id
+          schema:
+            type: integer
+            minimum: 1
+        - $ref: '#/components/parameters/pageNumberParam'
+        - $ref: '#/components/parameters/pageSizeParam'
+        - $ref: '#/components/parameters/sortPageParam'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Page' #Returns page, in which the element "content" is typed by a trainingProgram
+        '404':
+          description: Not Found #when course with given id not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request # when id is not valid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /courses/{courseId}/training-programs/{programId}:
+    parameters:
+      - in: path
+        required: true
+        name: courseId
+        schema:
+          type: integer
+          minimum: 1
+      - in: path
+        schema:
+          type: integer
+        required: true
+        name: programId
+    post:
+      summary: Add program
+      description: Add program with given programId to course with given courseId
+      responses:
+        '201':
+          description: Created
+        '404':
+          description: Not Found #when course or trainingProgram with given ids not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request # when courseId or(and) programId is not valid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Delete trainingProgram
+      description: Delete trainingProgram with given programId in list trainingPrograms  in course with given courseId
+      responses:
+        '200':
+          description: Ok
+        '404':
+          description: Not Found #when course or trainingProgram with given ids not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request # when courseId or(and) programId is not valid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+
+  /groups:
+    get:
+      summary: Get all groups
+      description: Get a list of all groups that are at the university
+      parameters:
+        - $ref: '#/components/parameters/pageNumberParam'
+        - $ref: '#/components/parameters/pageSizeParam'
+        - $ref: '#/components/parameters/sortPageParam'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Page' #Returns page, in which the element "content" is typed by a group
+        '500':
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: Add new group
+      requestBody:
+        description: Group wich should add
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Group' #id should be null
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Group' #Return added group with id
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Update group
+      description: Update group with given id
+      requestBody:
+        description: Group which should update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Group' #id should not be null
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Group'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /groups/{id}:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+          minimum: 1
+        required: true
+        description: The group id
+    get:
+      summary: Get one group
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Group'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Delete group with given id
+      responses:
+        '200':
+          description: Ok
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /groups/description/{description}:
+    get:
+      description: Find group by given description
+      parameters:
+        - in: path
+          name: description
+          schema:
+            type: string
+          required: true
+          description: The group description
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Group'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /groups/{id}/students:
+    get:
+      summary: Get students
+      description: Get all students who study in a group with a given id
+      parameters:
+        - in: path
+          required: true
+          name: id
+          schema:
+            type: integer
+            minimum: 1
+        - $ref: '#/components/parameters/pageNumberParam'
+        - $ref: '#/components/parameters/pageSizeParam'
+        - $ref: '#/components/parameters/sortPageParam'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Page' #Returns page, in which the element "content" is typed by a student
+        '404':
+          description: Not Found #when group with given id not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request # when id is not valid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /groups/{groupId}/students/{studentId}:
+    parameters:
+      - in: path
+        required: true
+        name: groupId
+        schema:
+          type: integer
+          minimum: 1
+      - in: path
+        schema:
+          type: integer
+        required: true
+        name: studentId
+    post:
+      summary: Add student
+      description: Enroll student with given studentId to group with given groupId
+      responses:
+        '201':
+          description: Created
+        '404':
+          description: Not Found #when group or student with given ids not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request # when groupId or(and) studentId is not valid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+
+  /lectureHalls:
+    get:
+      summary: Get all lectureHalls
+      description: Get a list of all lectureHalls that are at the university
+      parameters:
+        - $ref: '#/components/parameters/pageNumberParam'
+        - $ref: '#/components/parameters/pageSizeParam'
+        - $ref: '#/components/parameters/sortPageParam'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Page' #Returns page, in which the element "content" is typed by a lectureHall
+        '500':
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: Add new lectureHall
+      requestBody:
+        description: LectureHall wich should add
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LectureHall' #id should be null
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LectureHall' #Return added lectureHall with id
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Update lectureHall
+      description: Update lectureHall with given id
+      requestBody:
+        description: LectureHall which should update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LectureHall' #id should not be null
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LectureHall'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /lectureHalls/{id}:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+          minimum: 1
+        required: true
+        description: The lectureHall id
+    get:
+      summary: Get one lectureHall
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LectureHall'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Delete lectureHall with given id
+      responses:
+        '200':
+          description: Ok
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+
+  /schedules:
+    get:
+      summary: Get all schedule
+      description: Get all schedule
+      parameters:
+        - $ref: '#/components/parameters/pageNumberParam'
+        - $ref: '#/components/parameters/pageSizeParam'
+        - $ref: '#/components/parameters/sortPageParam'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Page' #Returns page, in which the element "content" is typed by a schedules
+        '500':
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: Add new schedule element
+      requestBody:
+        description: Schedule element wich should add
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Schedule' #id should be null
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Schedule' #Return added schedule element with id
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Update schedule element
+      description: Update schedule element with given id
+      requestBody:
+        description: Schedule element which should update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Schedule' #id should not be null
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Schedule'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /schedules/{id}:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+          minimum: 1
+        required: true
+        description: The schedule element id
+    get:
+      summary: Get one shedule element with given id
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Schedule'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Delete schedule element with given id
+      responses:
+        '200':
+          description: Ok
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /schedules/filter:
+    parameters:
+      - in: query
+        name: groupDescription
+        schema:
+          type: string
+        required: false
+        description: The description group which searching schedule
+      - in: query
+        name: teacherId
+        schema:
+          type: integer
+        required: false
+        description: The id teacher which searching schedule
+      - in: query
+        name: from
+        schema:
+          type: string
+          format: date
+        required: false
+        description: Start date for search
+      - in: query
+        name: to
+        schema:
+          type: string
+          format: date
+        required: false
+        description: End date for search
+
+    get:
+      summary: Get list schedule element by specified filters
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Schedule'
+        '404':
+          description: Not Found # where group or teacher from filters not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request # where filters is not valid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+
+  /students:
+    get:
+      summary: Get all students
+      description: Get a list of all students which learning in university
+      parameters:
+        - $ref: '#/components/parameters/pageNumberParam'
+        - $ref: '#/components/parameters/pageSizeParam'
+        - $ref: '#/components/parameters/sortPageParam'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Page' #Returns page, in which the element "content" is typed by a student
+        '500':
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: Add new student
+      requestBody:
+        description: Student wich should add
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Student' #id should be null
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Student' #Return added student with id
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Update student
+      description: Update student with given id
+      requestBody:
+        description: Student which should update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Student' #id should not be null
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Student'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /students/{id}:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+          minimum: 1
+        required: true
+        description: The student id
+    get:
+      summary: Get one student
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Student'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Delete student with given id
+      responses:
+        '200':
+          description: Ok
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+
+  /teachers:
+    get:
+      summary: Get all teachers
+      description: Get a list of all teachers working at the university
+      parameters:
+        - $ref: '#/components/parameters/pageNumberParam'
+        - $ref: '#/components/parameters/pageSizeParam'
+        - $ref: '#/components/parameters/sortPageParam'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Page' #Returns page, in which the element "content" is typed by a teacher
+        '500':
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: Add new teacher
+      requestBody:
+        description: Teacher wich should add
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Teacher' #id should be null
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Teacher' #Return added teacher with id
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Update teacher
+      description: Update teacher with given id
+      requestBody:
+        description: Teacher which should update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Teacher' #id should not be null
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Teacher'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /teachers/{id}:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+          minimum: 1
+        required: true
+        description: The teacher id
+    get:
+      summary: Get one teacher
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Teacher'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Delete teacher with given id
+      responses:
+        '200':
+          description: Ok
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /teachers/{id}/courses:
+    get:
+      summary: Get courses
+      description: Get a list of courses taught by a teacher with a given id
+      parameters:
+        - in: path
+          required: true
+          name: id
+          schema:
+            type: integer
+            minimum: 1
+        - $ref: '#/components/parameters/pageNumberParam'
+        - $ref: '#/components/parameters/pageSizeParam'
+        - $ref: '#/components/parameters/sortPageParam'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Page' #Returns page, in which the element "content" is typed by a course
+        '404':
+          description: Not Found #when teacher with given id not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request # when id is not valid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /teachers/{teacherId}/courses/{courseId}:
+    parameters:
+      - in: path
+        required: true
+        name: courseId
+        schema:
+          type: integer
+          minimum: 1
+      - in: path
+        schema:
+          type: integer
+        required: true
+        name: teacherId
+    post:
+      summary: Add course
+      description: Add course with given courseId to teacher with given teacherId
+      responses:
+        '201':
+          description: Created
+        '404':
+          description: Not Found #when course or teacher with given ids not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request # when courseId or(and) teacherId is not valid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Delete course
+      description: Delete course with given courseId from list courses teacher with given teacherId
+      responses:
+        '200':
+          description: oOk
+        '404':
+          description: Not Found #when course or teacher with given ids not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request # when courseId or(and) teacherId is not valid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+
+  /training-programs:
+    get:
+      summary: Get all TrainingPrograms
+      description: Get a list of all curricula taught at the university
+      parameters:
+        - $ref: '#/components/parameters/pageNumberParam'
+        - $ref: '#/components/parameters/pageSizeParam'
+        - $ref: '#/components/parameters/sortPageParam'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Page' #Returns page, in which the element "content" is typed by a trainingProgram
+        '500':
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: Add new trainingProgram
+      requestBody:
+        description: TrainingProgram wich should add
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrainingProgram' #id should be null
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrainingProgram' #Return added trainingProgram with id
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Update trainingProgram
+      description: Update trainingProgram with given id
+      requestBody:
+        description: TrainingProgram which should update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrainingProgram' #id should not be null
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrainingProgram'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /training-programs/{id}:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+          minimum: 1
+        required: true
+        description: The trainingProgram id
+    get:
+      summary: Get one trainingProgram
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrainingProgram'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Delete trainingProgram with given id
+      responses:
+        '200':
+          description: Ok
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /training-programs/speciality/{speciality}:
+    get:
+      parameters:
+        - in: path
+          name: speciality
+          schema:
+            type: string
+          required: true
+          description: The trainingProgram speciality
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrainingProgram'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /training-programs/{id}/courses:
+    get:
+      summary: Get courses
+      description: Get a list of courses that are included in the trainingProgram with a given id
+      parameters:
+        - in: path
+          required: true
+          name: id
+          schema:
+            type: integer
+            minimum: 1
+        - $ref: '#/components/parameters/pageNumberParam'
+        - $ref: '#/components/parameters/pageSizeParam'
+        - $ref: '#/components/parameters/sortPageParam'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Page' #Returns page, in which the element "content" is typed by a course
+        '404':
+          description: Not Found #when trainingProgram with given id not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request # when id is not valid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /training-programs/{programId}/courses/{courseId}:
+    parameters:
+      - in: path
+        required: true
+        name: courseId
+        schema:
+          type: integer
+          minimum: 1
+      - in: path
+        schema:
+          type: integer
+        required: true
+        name: programId
+    post:
+      summary: Add course
+      description: aAdd course with given courseId to trainingProgram with given programId
+      responses:
+        '201':
+          description: Created
+        '404':
+          description: Not Found #when course or trainingProgram with given ids not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request # when courseId or(and) programId is not valid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Delete course
+      description: Delete course with given courseId from list courses trainingProgram with given programId
+      responses:
+        '200':
+          description: Ok
+        '404':
+          description: Not Found #when course or trainingProgram with given ids not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request # when courseId or(and) programId is not valid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+
+
+components:
+
+  parameters:
+    pageNumberParam:
+      in: query
+      name: page
+      required: false
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
+        example: 2
+      description: Parameter which defined number of page
+
+    pageSizeParam:
+      in: query
+      name: size
+      required: false
+      schema:
+        type: integer
+        minimum: 0
+        default: 10
+        example: 2
+      description: page size
+
+    sortPageParam:
+      in: query
+      name: sort
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+          default: id,asc
+          description: Determines which field to sort by. The field for sorting is indicated before the comma.
+            The sorting direction is indicated after the comma.
+          example: name,asc
+      description: sort result
+
+  schemas:
+    Sort:
+      type: object
+      properties:
+        property:
+          type: string
+        ascending:
+          type: boolean
+        descending:
+          type: boolean
+        ignorCase:
+          type: boolean
+        nullHandling:
+          type: string
+          enum:
+            - NATIVE
+            - NULLS_FIRST
+            - NULLS_LAST
+
+    Course: # domain model object
+      type: object
+      properties:
+        id:
+          type: integer
+          minimum: 1
+          example: 1
+        name:
+          type: string
+          example: Economy
+        hours:
+          type: integer
+          minimum: 1
+          example: 1
+
+    Group: # domain model object
+      type: object
+      properties:
+        id:
+          type: integer
+          minimum: 1
+          example: 1
+        description:
+          type: string
+          example: GG-23
+        trainingProgramId:
+          type: integer
+          minimum: 1
+          example: 1
+        trainingProgram:
+          type: string
+          example: Jurisprudence
+
+    Schedule: # domain model object
+      type: object
+      properties:
+        id:
+          type: integer
+          minimum: 1
+          example: 1
+        lessondate:
+          type: string
+          format: date
+          example: "2040-01-25"
+        lessonTime:
+          type: string
+          format: time
+          example: "17:30:00"
+        lectureHallId:
+          type: integer
+          minimum: 1
+          example: 1
+        lectureHallHousing:
+          type: integer
+        lectureHallFloor:
+          type: integer
+          minimum: 1
+          example: 1
+        lectureHallNumber:
+          type: integer
+          minimum: 1
+          example: 1
+        groupDescription:
+          type: string
+          example: KS-67
+        teacherId:
+          type: integer
+          minimum: 1
+          example: 1
+        teacherFirstName:
+          type: string
+          example: Ivan
+        teacherlastName:
+          type: string
+          example: Ivanov
+        courseName:
+          type: string
+          example: Economy
+
+    Student: # domain model object
+      type: object
+      properties:
+        id:
+          type: integer
+          minimum: 1
+          example: 1
+        firstName:
+          type: string
+          example: Ivan
+        lastname:
+          type: string
+          example: Ivanov
+        groupDescription:
+          type: string
+          example: DG-46
+        groupId:
+          type: string
+          minimum: 1
+          example: 1
+
+    Teacher: # domain model object
+      type: object
+      properties:
+        id:
+          type: integer
+          minimum: 1
+          example: 1
+        firstName:
+          type: string
+          example: Ivan
+        lastName:
+          type: string
+          example: Ivanov
+
+    TrainingProgram: # domain model object
+      type: object
+      properties:
+        id:
+          type: integer
+          minimum: 1
+          example: 1
+        speciality:
+          type: string
+          example: Jurisprudence
+
+    LectureHall:
+      type: object
+      properties:
+        id:
+          type: integer
+          minimum: 1
+          example: 1
+        housing:
+          type: integer
+          minimum: 1
+          example: 1
+        floor:
+          type: integer
+          minimum: 1
+          example: 1
+        number:
+          type: integer
+          minimum: 1
+          example: 1
+
+    Page:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            anyOf:
+              - $ref: '#/components/schemas/Course'
+              - $ref: '#/components/schemas/Group'
+              - $ref: '#/components/schemas/LectureHall'
+              - $ref: '#/components/schemas/Schedule'
+              - $ref: '#/components/schemas/Student'
+              - $ref: '#/components/schemas/Teacher'
+              - $ref: '#/components/schemas/TrainingProgram'
+        sort:
+          $ref: '#/components/schemas/Sort'
+        totalPages:
+          type: integer
+        totalElements:
+          type: integer
+        numberOfElements:
+          type: integer
+        pageSize:
+          type: integer
+        pageNumber:
+          type: integer
+        paged:
+          type: boolean
+        unpaged:
+          type: boolean
+        lastPage:
+          type: boolean
+        firstPage:
+          type: boolean
+
+
+    Error:
+      type: CustomErrorBody
+      properties:
+        timestamp:
+          type: string
+          example: 2020-11-18 12:21:40:169 GMT+03:00
+        message:
+          type: string
+        path:
+          type: string

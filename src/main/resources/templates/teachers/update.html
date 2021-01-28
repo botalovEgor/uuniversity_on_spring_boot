@@ -1,0 +1,25 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8"/>
+    <title>изменить данные учителя</title>
+
+</head>
+<body th:inline="text">
+<a th:href="@{/}">главная страница</a>
+<br>
+<h4>изменить данные учителя с id: [[${updateTeacherDto.id}]]</h4>
+<form th:action="@{/teachers/update}" th:method="POST" th:object="${updateTeacherDto}">
+    <label for="teacherId">id учителя</label>
+    <input type="text" th:field="*{id}" th:value="*{id}" readonly id="teacherId"/>
+    <br>
+    <label for="firstName">имя</label>
+    <input type="text" th:field="*{firstName}" th:value="*{firstName}" id="firstName"/>
+    <br>
+    <label for="lastName">фамилия</label>
+    <input type="text" th:field="*{lastName}" th:value="*{lastName}" id="lastName"/>
+    <br>
+    <input type="submit" value="изменить"/>
+</form>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8"/>
+    <title>обновить расписание</title>
+
+</head>
+<body th:inline="text">
+<a th:href="@{/}">главная страница</a>
+<br>
+<h4>изменить элемент расписания</h4>
+<form th:action="@{/schedules/update}" th:method="POST" th:object="${updateScheduleDto}">
+    <label for="id">id</label>
+    <input type="text" th:field="*{id}" th:value="${id}" readonly id="id"/>
+    <br>
+    <label for="lessonDate">дата</label>
+    <input type="date" th:field="*{lessonDate}" th:value="*{lessonDate}" id="lessonDate"/>
+    <br>
+    <label for="lessonTime">время</label>
+    <input type="time" th:field="*{lessonTime}" th:value="*{lessonTime}" id="lessonTime"/>
+    <br>
+    <label for="lectureHallId">id аудитории</label>
+    <input type="text" th:field="*{lectureHallId}" th:value="*{lectureHallId}" id="lectureHallId"/>
+    <br>
+    <label for="groupDescription">группа</label>
+    <input type="text" th:field="*{groupDescription}" th:value="*{groupDescription}" id="groupDescription"/>
+    <br>
+    <label for="teacherId">id учителя</label>
+    <input type="text" th:field="*{teacherId}" th:value="*{teacherId}" id="teacherId"/>
+    <br>
+    <label for="courseName">предмет</label>
+    <input type="text" th:field="*{courseName}" th:value="*{courseName}" id="courseName"/>
+    <br>
+    <input type="submit" value="обновить"/><br/>
+</form>
+<br/>
+</body>
+</html>

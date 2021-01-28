@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>расписание</title>
+</head>
+<body>
+<a th:href="@{/}">главная страница</a>
+<br>
+<a th:href="@{/schedules}">показать все расписание</a>
+<br>
+<br>
+<p>
+    <span>найдены следующие элементы расписания:</span>
+</p>
+<br>
+<br>
+<table border="1">
+    <thead>
+    <tr>
+        <th>id</th>
+        <th>дата урока</th>
+        <th>время урока</th>
+        <th>корпус</th>
+        <th>этаж</th>
+        <th>кабинет</th>
+        <th>группа</th>
+        <th>предмет</th>
+        <th>учитель</th>
+        <th>действия</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${schedules.isEmpty()}">
+        <td colspan="8" align="center">расписание не найдено</td>
+    </tr>
+    <tr th:each="schedule : ${schedules}">
+        <td><span th:text="${schedule.id}"></span></td>
+        <td><span th:text="${schedule.lessonDate}"></span></td>
+        <td><span th:text="${schedule.lessonTime}"></span></td>
+        <td><span th:text="${schedule.lectureHallHousing}"></span></td>
+        <td><span th:text="${schedule.lectureHallFloor}"></span></td>
+        <td><span th:text="${schedule.lectureHallNumber}"></span></td>
+        <td><span th:text="${schedule.groupDescription}"></span></td>
+        <td><span th:text="${schedule.courseName}"></span></td>
+        <td><span th:text="${schedule.teacherFirstName}"></span>
+            <span th:text="${schedule.teacherLastName}"></span></td>
+        <td><a th:href="@{/schedules/{id}/update(id=${schedule.id})}">изменить</a>
+            <a th:href="@{/schedules/{id}/delete(id=${schedule.id})}">удалить</a></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

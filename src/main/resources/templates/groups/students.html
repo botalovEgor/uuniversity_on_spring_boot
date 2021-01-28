@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>студенты группы</title>
+</head>
+<body>
+<a th:href="@{/}">главная страница</a>
+<br>
+<p>
+    <span>в группе </span>
+    <span th:text="${group.id} "></span>
+    <span th:text="${group.description}"></span>
+    <span> числятся следующие студенты:</span>
+</p>
+<table border="1">
+    <thead>
+    <tr>
+        <th>id</th>
+        <th>имя</th>
+        <th>фамилия</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${students.isEmpty()}">
+        <td colspan="4">в группе не числится ни один студент</td>
+    </tr>
+    <tr th:each="student : ${students}">
+        <td><span th:text="${student.id}"></span></td>
+        <td><span th:text="${student.firstName}"></span></td>
+        <td><span th:text="${student.lastName}"></span></td>
+    </tr>
+    </tbody>
+</table>
+<br>
+<form th:action="@{/groups/{id}/students(id = ${group.id})}" method="post">
+    <p>Добавить студента в группу:</p>
+    <label for="studentId">id добавляемого студента</label>
+    <input type="text" id="studentId" name="studentId"/>
+    <input type="submit" value="добавить"/>
+</form>
+</body>
+</html>

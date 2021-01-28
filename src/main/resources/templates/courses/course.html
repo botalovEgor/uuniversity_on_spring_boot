@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Курс</title>
+</head>
+<body>
+<a th:href="@{/}">главная страница</a>
+<br>
+<p>номер предмета: <span th:text="${courseDto.id}"></span></p>
+<p>имя предмета: <span th:text="${courseDto.name}"></span></p>
+<p>количество часов: <span th:text="${courseDto.hours}"></span></p>
+<br>
+<a href="/courses">показать все предметы</a>
+</body>
+</html>

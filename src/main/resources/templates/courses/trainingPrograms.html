@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>все программы</title>
+</head>
+<body>
+<a th:href="@{/}">главная страница</a>
+<br>
+<p>
+    <span>курс </span>
+    <span th:text="${course.id} "></span>
+    <span th:text="${course.name}"></span>
+    <span> преподается с в следующих учебных программах:</span>
+</p>
+<br>
+<table border="1">
+    <thead>
+    <tr>
+        <th>id</th>
+        <th>специальность</th>
+        <th align="center">действия</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${!programs.hasContent()}">
+        <td colspan="3">не найдено ни одной учебной программы</td>
+    </tr>
+    <tr th:each="program : ${programs}">
+        <td><span th:text="${program.id}"></span></td>
+        <td><span th:text="${program.speciality}"></span></td>
+        <td>
+            <a th:href="@{/courses/{courseId}/training-programs/{programId}/delete(courseId=${course.id}, programId=${program.id})}">удалить</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<br>
+<br>
+<a th:if="${programs.hasPrevious()}"
+   th:href="@{/courses/{courseId}/training-programs(courseId=${course.id}, page=${programs.previousPageable().pageNumber}, size=${programs.size})}">предыдущая
+    страница</a>
+
+<a th:if="${programs.hasNext()}"
+   th:href="@{/courses/{courseId}/training-programs(courseId=${course.id},page=${programs.nextPageable().pageNumber}, size=${programs.size})}">следуюшая
+    страница</a>
+<br>
+<h4>Добавить курс в программу</h4>
+<form th:action="@{/courses/{courseId}/training-programs(courseId=${course.id})}" th:method="POST">
+    <label for="speciality">специальность:</label>
+    <input type="text" id="speciality" name="speciality"/>
+    <input type="submit" value="добавить"/>
+    </div>
+</form>
+</body>
+</html>
+

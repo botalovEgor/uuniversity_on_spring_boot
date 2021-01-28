@@ -1,0 +1,20 @@
+spring:
+  jpa:
+    database: h2
+    database-platform: org.hibernate.dialect.H2Dialect
+    properties:
+      hibernate:
+        format_sql: true
+  flyway:
+    locations: classpath:dataBaseMigration
+logging:
+  file:
+    path: ./tests/logs/
+  level:
+    org:
+      hibernate:
+        type:
+          descriptor:
+            sql:
+              BasicBinder: trace
+

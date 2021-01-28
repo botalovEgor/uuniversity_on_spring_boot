@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8"/>
+    <title>изменить аудиторию</title>
+
+</head>
+<body th:inline="text">
+<a th:href="@{/}">главная страница</a>
+<br>
+<h4> изменить данные аудитории с id: [[${updateLectureHall.id}]]</h4>
+<form th:action="@{/lectureHalls/update}" th:method="POST" th:object="${updateLectureHall}">
+    <label for="id">id</label>
+    <input type="text" th:field="*{id}" th:value="${id}" readonly id="id"/>
+    <br>
+    <label for="housing">номер корпуса</label>
+    <input type="text" th:field="*{housing}" th:value="*{housing}" id="housing"/>
+    <br>
+    <label for="floor">этаж</label>
+    <input type="text" th:field="*{floor}" th:value="*{floor}" id="floor"/>
+    <br>
+    <label for="number">номер кабинета</label>
+    <input type="text" th:field="*{number}" th:value="*{number}" id="number"/>
+    <br>
+    <br><input type="submit" value="изменить"/><br/>
+</form>
+</body>
+</html>

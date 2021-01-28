@@ -1,0 +1,22 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8"/>
+    <title>изменить учебную программу</title>
+
+</head>
+<body th:inline="text">
+<a th:href="@{/}">главная страница</a>
+<br>
+<h4>изменить название специальности с id: [[${updateTrainingProgramDto.id}]]</h4>
+<form th:action="@{/training-programs/update}" th:method="POST" th:object="${updateTrainingProgramDto}">
+    <label for="trainingProgramId">id учебной программы</label>
+    <input type="text" th:field="*{id}" th:value="*{id}" id="trainingProgramId" readonly/>
+    <br>
+    <label for="speciality">специальность</label>
+    <input type="text" th:field="*{speciality}" th:value="*{speciality}" id="speciality"/>
+    <br>
+    <input type="submit" value="update"/>
+</form>
+</body>
+</html>

@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Error</title>
+</head>
+<body>
+<a th:href="@{/}">главная страница</a>
+<br>
+<p th:text="${errorMessage}">request execution error!</p>
+<br>
+</body>
+</html>

@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/university
+    username: AdminUniversity
+    password: 12345
+  jpa:
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQL95Dialect
+  flyway:
+    locations: classpath:dataBaseMigration
+logging:
+  file:
+    path: ./university/logs
+  level.root: info

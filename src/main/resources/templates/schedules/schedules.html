@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Все расписание</title>
+</head>
+<body>
+<a th:href="@{/}">главная страница</a>
+<br/>
+<table border="1">
+    <thead>
+    <tr>
+        <th>id</th>
+        <th>дата урока</th>
+        <th>время урока</th>
+        <th>корпус</th>
+        <th>этаж</th>
+        <th>кабинет</th>
+        <th>группа</th>
+        <th>предмет</th>
+        <th>учитель</th>
+        <th>действия</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${!schedules.hasContent()}">
+        <td colspan="8" align="center">расписание не найдено</td>
+    </tr>
+    <tr th:each="schedule : ${schedules}">
+        <td><span th:text="${schedule.id}"></span></td>
+        <td><span th:text="${schedule.lessonDate}"></span></td>
+        <td><span th:text="${schedule.lessonTime}"></span></td>
+        <td><span th:text="${schedule.lectureHallHousing}"></span></td>
+        <td><span th:text="${schedule.lectureHallFloor}"></span></td>
+        <td><span th:text="${schedule.lectureHallNumber}"></span></td>
+        <td><span th:text="${schedule.groupDescription}"></span></td>
+        <td><span th:text="${schedule.courseName}"></span></td>
+        <td><span th:text="${schedule.teacherFirstName}"></span>
+            <span th:text="${schedule.teacherLastName}"></span></td>
+        <td><a th:href="@{/schedules/{id}/update(id=${schedule.id})}">изменить</a>
+            <a th:href="@{/schedules/{id}/delete(id=${schedule.id})}">удалить</a></td>
+    </tr>
+    </tbody>
+</table>
+<br>
+<br>
+<a th:if="${schedules.hasPrevious()}" th:href="@{/schedules(page=${schedules.previousPageable().pageNumber}, size=${schedules.size})}">предыдущая страница</a>
+
+<a th:if="${schedules.hasNext()}" th:href="@{/schedules(page=${schedules.nextPageable().pageNumber}, size=${schedules.size})}">следуюшая страница</a>
+<br>
+<form th:action="@{/schedules}" method="post">
+    <p><b>Добавить новый элемент расписания</b></p>
+    <label for="lessonDate">дата занятия</label>
+    <input type="date" id="lessonDate" name="lessonDate"/>
+    <br>
+    <label for="lessonTime">время занятия</label>
+    <input type="time" id="lessonTime" name="lessonTime"/>
+    <br>
+    <label for="lectureHallId">id кабинета</label>
+    <input type="number" id="lectureHallId" name="lectureHallId"/>
+    <br>
+    <label for="groupDescription">название группы</label>
+    <input type="text" id="groupDescription" name="groupDescription"/>
+    <br>
+    <label for="teacherId">id учителя</label>
+    <input type="number" id="teacherId" name="teacherId"/>
+    <br>
+    <label for="courseName">название предмета</label>
+    <input type="text" id="courseName" name="courseName"/>
+    <br><input type="submit" value="добавить"/>
+</form>
+<br>
+<form action="/schedules/byCriteria" method="POST">
+    <p><b>Введите параметры для поиска</b></p>
+    <label for="groupDescription">введите название группы</label>
+    <input type="text" th:name="groupDescription" id="groupDescription" name="groupDescription"/>
+
+    <label for="teacherId">введите id учителя</label>
+    <input type="text" th:name="teacherId" id="teacherId" name="teacherId" />
+
+    <label for="from"> с </label>
+    <input type="date" th:name="from" id="from" name="from"/>
+
+    <label for="to"> до </label>
+    <input type="date" th:name="to" id="to" name="to"/><br/>
+
+    <br/><input type="submit" value="найти"/><br/>
+</form>
+</body>
+</html>

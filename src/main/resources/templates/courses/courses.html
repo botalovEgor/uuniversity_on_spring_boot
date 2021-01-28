@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Все предметы</title>
+</head>
+<body>
+<a th:href="@{/}">главная страница</a>
+<br>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th> номер</th>
+        <th> имя предмета</th>
+        <th> количество часов</th>
+        <th align="center"> действия</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${!page.hasContent()}">
+        <td colspan="4" align="center"> не найдено ни одного предмета</td>
+    </tr>
+    <tr th:each="course : ${page.getContent()}">
+        <td><span th:text="${course.id}"></span></td>
+        <td><span th:text="${course.name}"></span></td>
+        <td><span th:text="${course.hours}"></span></td>
+        <td><a th:href="@{/courses/{id}/update(id=${course.id})}" title="изменить название предмета или количество часов">изменить</a>
+            <a th:href="@{/courses/{id}/delete(id=${course.id})}">удалить</a>
+            <a th:href="@{/courses/{courseId}/teachers(courseId=${course.id})}" title="показать всех учителей, преподающих предмет">учителя</a>
+            <a th:href="@{/courses/{courseId}/training-programs(courseId=${course.id})}" title="показать программы, в которых преподается предмет">учебные программы</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<br>
+<a th:if="${page.hasPrevious()}" th:href="@{/courses(page=${page.previousPageable().pageNumber}, size=${page.size})}">предыдущая страница</a>
+<br>
+<a th:if="${page.hasNext()}" th:href="@{/courses(page=${page.nextPageable().pageNumber}, size=${page.size})}">следуюшая страница</a>
+<br>
+<h4>Создать новый курс:</h4>
+<form th:action="@{/courses}" th:method="post">
+    <div>
+        <label for="name">название курса</label>
+        <input type="text" id="name" name="name"/>
+
+        <label for="hours">количество часов</label>
+        <input type="text" id="hours" name="hours"/>
+
+        <input type="submit" value="создать"/>
+    </div>
+</form>
+</body>
+</html>
