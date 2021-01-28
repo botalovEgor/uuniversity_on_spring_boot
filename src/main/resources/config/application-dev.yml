@@ -1,7 +1,7 @@
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/university
-    username: AdminUniversity
+    username: Admin
     password: 12345
   jpa:
     database: postgresql
